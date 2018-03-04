@@ -1,7 +1,7 @@
 # Convert
-#    'king - man + woman'
+#    king - man + woman
 # to
-#    '~"king" - "man" + "woman"'
+#    ~"king" - "man" + "woman"
 processQuery <- function(query) {
   query_str = ''
   parts = unlist(strsplit(query, ' '))

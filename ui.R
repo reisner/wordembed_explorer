@@ -1,5 +1,5 @@
-ui <- fluidPage(
-  fluidRow(
+ui <- fixedPage(
+  fixedRow(
     column(
       h2("Query a Word"),
       textInput("word", "Word:", "city"),
@@ -7,32 +7,34 @@ ui <- fluidPage(
     width = 6),
     column(
       h2("Query using a Word Formula"),
-      textInput("formula", "Word Formula:", "Man"),
-      em("example: transit - lrt + budget"),
+      textInput("formula", "Word Formula:", "edmonton + budget - waste"),
+      strong("Usage:"), em("use +/- between words. Ensure spaces between terms."),
+      br(),br(),
       tableOutput("formula_result"),
       width = 6)
   ),
 
-  fluidRow(
+  fixedRow(
     br(), hr(), br()
   ),
 
-  fluidRow(
-    fluidRow(
-      column(h2("Word Analogy:"), width = 12)
+  fixedRow(
+    fixedRow(
+      column(h2("Word Analogy:"), width = 5)
     ),
-    fluidRow(
-      column(textInput("analogy_a", NULL, "man"), width = 5),
-      column("is to", width = 2),
-      column(textInput("analogy_b", NULL, "king"), width = 5)
+    fixedRow(
+      column(textInput("analogy_a", NULL, "man"), width = 2),
+      column("is to", width = 1),
+      column(textInput("analogy_b", NULL, "king"), width = 2)
     ),
-    fluidRow(
-      column("As", width = 12)
+    fixedRow(
+      column('', width = 1),
+      column(strong("As"), width = 10)
     ),
-    fluidRow(
-      column(textInput("analogy_c", NULL, "woman"), width = 5),
-      column("is to?", width = 2),
-      column(tableOutput("analogy_result"), width = 5)
+    fixedRow(
+      column(textInput("analogy_c", NULL, "woman"), width = 2),
+      column("is to?", width = 1),
+      column(tableOutput("analogy_result"), width = 2)
     )
   )
 )
