@@ -2,12 +2,50 @@ ui <- fixedPage(
   titlePanel("Word Embedding Explorer"),
   mainPanel(
     tabsetPanel(
-      tabPanel("Word Query", textInput("word_query", "Word:", "city")),
-      tabPanel("Word Analogy", ''),
-      tabPanel("Word Formula", tagList(
-        textInput("word_formula", "Word Formula:", "rec - affordable"),
-        strong("Usage:"), em("use +/- between words. Ensure spaces between terms."))),
-      tabPanel("Query Builder", '')
+      tabPanel(
+        "Word Query",
+        textInput("word_query", "Word:", "city"),
+        value = 'word_query'
+      ),
+
+      tabPanel(
+        "Word Analogy",
+        fixedRow(
+          br(), br(),
+          fixedRow(
+            column(textInput("analogy_a", NULL, "rec"), width = 2),
+            column("is to", width = 1),
+            column(textInput("analogy_b", NULL, "fun"), width = 2)
+          ),
+          fixedRow(
+            column('', width = 1),
+            column(strong("As"), width = 10)
+          ),
+          fixedRow(
+            column(textInput("analogy_c", NULL, "edmonton"), width = 2),
+            column("is to?", width = 1),
+            column(tableOutput("analogy_result"), width = 2)
+          )
+        ),
+        value = 'word_analogy'
+      ),
+
+      tabPanel(
+        "Word Formula",
+        tagList(
+          textInput("word_formula", "Word Formula:", "rec - affordable"),
+          strong("Usage:"), em("use +/- between words. Ensure spaces between terms.")
+        ),
+        value = 'word_formula'
+      ),
+
+      tabPanel(
+        "Query Builder",
+        '',
+        value = 'word_query_builder'
+      ),
+
+      id = "query_type"
     ),
 
     br(), hr(), br(),
@@ -17,23 +55,5 @@ ui <- fixedPage(
   )
 
 
-  # fixedRow(
-  #   fixedRow(
-  #     column(h2("Word Analogy:"), width = 5)
-  #   ),
-  #   fixedRow(
-  #     column(textInput("analogy_a", NULL, "man"), width = 2),
-  #     column("is to", width = 1),
-  #     column(textInput("analogy_b", NULL, "king"), width = 2)
-  #   ),
-  #   fixedRow(
-  #     column('', width = 1),
-  #     column(strong("As"), width = 10)
-  #   ),
-  #   fixedRow(
-  #     column(textInput("analogy_c", NULL, "woman"), width = 2),
-  #     column("is to?", width = 1),
-  #     column(tableOutput("analogy_result"), width = 2)
-  #   )
-  # )
+
 )

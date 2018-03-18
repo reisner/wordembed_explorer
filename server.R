@@ -33,18 +33,31 @@ server <- function(input, output) {
     model_query(formula)
   })
 
-  # output$analogy_result <- renderTable({
-  #   query_a = input$analogy_a
-  #   query_b = input$analogy_b
-  #   query_c = input$analogy_c
-  #   req(query_a)
-  #   req(query_b)
-  #   req(query_c)
-  #   query_str = paste0('~"', query_b, '" - "', query_a, '" + "', query_c, '"')
-  #   formula = as.formula(query_str)
-  #   wordVectors::closest_to(model, eval(formula))
-  # })
+  observeEvent(
+    {
+      input$analogy_a
+      input$analogy_b
+      input$analogy_c
+    },
+    {
+      query_a = input$analogy_a
+      query_b = input$analogy_b
+      query_c = input$analogy_c
+      req(query_a)
+      req(query_b)
+      req(query_c)
+      query_str = paste0('~"', query_b, '" - "', query_a, '" + "', query_c, '"')
+      formula = as.formula(query_str)
+      formula = eval(formula)
+      model_query(formula)
+    }
+  )
 
+  #    if (input$cluster_tabset == "manual") {
+  observeEvent(input$query_type, {
+    print("HERE!")
+    print(input$query_type)
+  })
 
   output$query_result <- renderTable({
     wordVectors::closest_to(model, model_query())
