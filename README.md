@@ -1,4 +1,5 @@
 # wordembed_explorer
+
 A shiny app for exploring word embedding models.
 
 ## Setup
@@ -11,6 +12,15 @@ install_github('bmschmidt/wordVectors')
 ```
 
 ## Run app:
+
+From R:
+
 ```
 shiny::runApp()
+```
+
+From the command line:
+
+```
+Rscript runapp.R
 ```
