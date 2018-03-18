@@ -16,18 +16,17 @@ ui <- fixedPage(
         fixedRow(
           br(), br(),
           fixedRow(
-            column(textInput("analogy_a", NULL, "rec"), width = 2),
+            column(wordInputUI("analogy_a"), width = 2),
             column("is to", width = 1),
-            column(textInput("analogy_b", NULL, "fun"), width = 2)
+            column(wordInputUI("analogy_b"), width = 2)
           ),
           fixedRow(
             column('', width = 1),
             column(strong("As"), width = 10)
           ),
           fixedRow(
-            column(textInput("analogy_c", NULL, "edmonton"), width = 2),
-            column("is to?", width = 1),
-            column(tableOutput("analogy_result"), width = 2)
+            column(wordInputUI("analogy_c"), width = 2),
+            column("is to?", width = 1)
           )
         ),
         value = 'word_analogy'

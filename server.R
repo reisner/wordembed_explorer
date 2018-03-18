@@ -40,11 +40,25 @@ server <- function(input, output) {
 
 
   # ------ Query by Analogy
-
+  analogy_a_result = callModule(wordInput,
+                                'analogy_a',
+                                words = query_words,
+                                label = '',
+                                selected_words = 'rec')
+  analogy_b_result = callModule(wordInput,
+                                'analogy_b',
+                                words = query_words,
+                                label = '',
+                                selected_words = 'fun')
+  analogy_c_result = callModule(wordInput,
+                                'analogy_c',
+                                words = query_words,
+                                label = '',
+                                selected_words = 'edmonton')
   word_analogy_result = reactive({
-    query_a = input$analogy_a
-    query_b = input$analogy_b
-    query_c = input$analogy_c
+    query_a = analogy_a_result()
+    query_b = analogy_b_result()
+    query_c = analogy_c_result()
     req(query_a)
     req(query_b)
     req(query_c)
@@ -55,7 +69,6 @@ server <- function(input, output) {
 
 
   # ------ Query Builder
-
   builder_pos_terms = callModule(wordInput,
                                  'builder_pos_terms',
                                  words = query_words,
@@ -85,7 +98,6 @@ server <- function(input, output) {
 
 
   # ------ Query Result
-
   output$query_result = renderTable({
     query_type = input$query_type
     if (query_type == 'word_query') {
