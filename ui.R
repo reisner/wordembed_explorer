@@ -1,3 +1,5 @@
+source("WordInputModules.R")
+
 ui <- fixedPage(
   titlePanel("Word Embedding Explorer"),
 
@@ -42,8 +44,8 @@ ui <- fixedPage(
 
       tabPanel(
         "Query Builder",
-        textInput('builder_pos_terms', "Positive Terms:", 'edmonton'),
-        textInput('builder_neg_terms', "Negative Terms:", 'waste'),
+        wordInputUI('builder_pos_terms'),
+        wordInputUI('builder_neg_terms'),
         value = 'word_query_builder'
       ),
 

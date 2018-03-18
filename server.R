@@ -20,11 +20,18 @@ processQuery <- function(query) {
 
 server <- function(input, output) {
   model = wordVectors::read.vectors("word_embeddings.bin")
+  query_words = row.names(model)
+
+
+  # ------ Word Formula
 
   word_formula_result = reactive({
     query = processQuery(input$word_formula)
     as.formula(query)
   })
+
+
+  # ------ Query by Analogy
 
   word_analogy_result = reactive({
     query_a = input$analogy_a
@@ -38,9 +45,22 @@ server <- function(input, output) {
     eval(formula)
   })
 
+
+  # ------ Query Builder
+
+  builder_pos_terms = callModule(wordInput,
+                                 'builder_pos_terms',
+                                 words = query_words,
+                                 label = 'Include Concepts',
+                                 selected_words = 'city')
+  builder_neg_terms = callModule(wordInput,
+                                 'builder_neg_terms',
+                                 words = query_words,
+                                 label = 'Exclude Concepts',
+                                 selected_words = 'waste')
   word_query_builder_result = reactive({
-    pos_terms = input$builder_pos_terms
-    neg_terms = input$builder_neg_terms
+    pos_terms = builder_pos_terms()
+    neg_terms = builder_neg_terms()
 
     req(!is.null(pos_terms) | !is.null(neg_terms))
     pos_present = !is.null(pos_terms)
@@ -54,6 +74,9 @@ server <- function(input, output) {
       -model[[neg_terms]]
     }
   })
+
+
+  # ------ Query Result
 
   output$query_result = renderTable({
     query_type = input$query_type
