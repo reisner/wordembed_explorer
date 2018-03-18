@@ -21,42 +21,38 @@ processQuery <- function(query) {
 server <- function(input, output) {
   model = wordVectors::read.vectors("word_embeddings.bin")
 
-  model_query = reactiveVal(value = "")
-
-  observeEvent(input$word_query, {
-    model_query(input$word_query)
-  })
-
-  observeEvent(input$word_formula, {
+  word_formula_result = reactive({
     query = processQuery(input$word_formula)
-    formula = as.formula(query)
-    model_query(formula)
+    as.formula(query)
   })
 
-  observeEvent(
-    {
-      input$analogy_a
-      input$analogy_b
-      input$analogy_c
-    },
-    {
-      query_a = input$analogy_a
-      query_b = input$analogy_b
-      query_c = input$analogy_c
-      req(query_a)
-      req(query_b)
-      req(query_c)
-      query_str = paste0('~"', query_b, '" - "', query_a, '" + "', query_c, '"')
-      formula = as.formula(query_str)
-      formula = eval(formula)
-      model_query(formula)
-    }
-  )
+  word_analogy_result = reactive({
+    query_a = input$analogy_a
+    query_b = input$analogy_b
+    query_c = input$analogy_c
+    req(query_a)
+    req(query_b)
+    req(query_c)
+    query_str = paste0('~"', query_b, '" - "', query_a, '" + "', query_c, '"')
+    formula = as.formula(query_str)
+    eval(formula)
+  })
 
-  #    if (input$cluster_tabset == "manual") {
-  observeEvent(input$query_type, {
-    print("HERE!")
-    print(input$query_type)
+  word_query_builder_result = reactive({
+    'test'
+  })
+
+  model_query = reactive({
+    query_type = input$query_type
+    if (query_type == 'word_query') {
+      return(input$word_query)
+    } else if (query_type == 'word_analogy') {
+      return(word_analogy_result())
+    } else if (query_type == 'word_formula') {
+      return(word_formula_result())
+    } else if (query_type == 'word_query_builder') {
+      return(word_query_builder_result())
+    }
   })
 
   output$query_result <- renderTable({
