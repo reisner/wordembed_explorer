@@ -1,40 +1,58 @@
 ui <- fixedPage(
-  fixedRow(
-    column(
-      h2("Query a Word"),
-      textInput("word", "Word:", "city"),
-      tableOutput("word_result"),
-    width = 6),
-    column(
-      h2("Query using a Word Formula"),
-      textInput("formula", "Word Formula:", "edmonton + budget - waste"),
-      strong("Usage:"), em("use +/- between words. Ensure spaces between terms."),
-      br(),br(),
-      tableOutput("formula_result"),
-      width = 6)
-  ),
+  titlePanel("Word Embedding Explorer"),
 
-  fixedRow(
-    br(), hr(), br()
-  ),
+  mainPanel(
+    tabsetPanel(
+      tabPanel(
+        "Single Word Query",
+        textInput("word_query", "Word:", "city"),
+        value = 'word_query'
+      ),
 
-  fixedRow(
-    fixedRow(
-      column(h2("Word Analogy:"), width = 5)
+      tabPanel(
+        "Query by Analogy",
+        fixedRow(
+          br(), br(),
+          fixedRow(
+            column(textInput("analogy_a", NULL, "rec"), width = 2),
+            column("is to", width = 1),
+            column(textInput("analogy_b", NULL, "fun"), width = 2)
+          ),
+          fixedRow(
+            column('', width = 1),
+            column(strong("As"), width = 10)
+          ),
+          fixedRow(
+            column(textInput("analogy_c", NULL, "edmonton"), width = 2),
+            column("is to?", width = 1),
+            column(tableOutput("analogy_result"), width = 2)
+          )
+        ),
+        value = 'word_analogy'
+      ),
+
+      tabPanel(
+        "Word Formula",
+        tagList(
+          textInput("word_formula", "Word Formula:", "rec - affordable"),
+          strong("Usage:"), em("use +/- between words. Ensure spaces between terms.")
+        ),
+        value = 'word_formula'
+      ),
+
+      tabPanel(
+        "Query Builder",
+        textInput('builder_pos_terms', "Positive Terms:", 'edmonton'),
+        textInput('builder_neg_terms', "Negative Terms:", 'waste'),
+        value = 'word_query_builder'
+      ),
+
+      id = "query_type"
     ),
-    fixedRow(
-      column(textInput("analogy_a", NULL, "man"), width = 2),
-      column("is to", width = 1),
-      column(textInput("analogy_b", NULL, "king"), width = 2)
-    ),
-    fixedRow(
-      column('', width = 1),
-      column(strong("As"), width = 10)
-    ),
-    fixedRow(
-      column(textInput("analogy_c", NULL, "woman"), width = 2),
-      column("is to?", width = 1),
-      column(tableOutput("analogy_result"), width = 2)
-    )
+
+    br(), hr(), br(),
+
+    h3("Query Result:"),
+    fluidRow(tableOutput('query_result'), width = 12)
   )
 )

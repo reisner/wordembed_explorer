@@ -21,21 +21,12 @@ processQuery <- function(query) {
 server <- function(input, output) {
   model = wordVectors::read.vectors("word_embeddings.bin")
 
-  output$word_result <- renderTable({
-    query = input$word
-    req(query)
-    wordVectors::closest_to(model, query)
+  word_formula_result = reactive({
+    query = processQuery(input$word_formula)
+    as.formula(query)
   })
 
-  output$formula_result <- renderTable({
-    query = input$formula
-    req(query)
-    query = processQuery(query)
-    formula = as.formula(query)
-    wordVectors::closest_to(model, eval(formula))
-  })
-
-  output$analogy_result <- renderTable({
+  word_analogy_result = reactive({
     query_a = input$analogy_a
     query_b = input$analogy_b
     query_c = input$analogy_c
@@ -44,6 +35,40 @@ server <- function(input, output) {
     req(query_c)
     query_str = paste0('~"', query_b, '" - "', query_a, '" + "', query_c, '"')
     formula = as.formula(query_str)
-    wordVectors::closest_to(model, eval(formula))
+    eval(formula)
+  })
+
+  word_query_builder_result = reactive({
+    pos_terms = input$builder_pos_terms
+    neg_terms = input$builder_neg_terms
+
+    req(!is.null(pos_terms) | !is.null(neg_terms))
+    pos_present = !is.null(pos_terms)
+    neg_present = !is.null(neg_terms)
+
+    if (pos_present & neg_present) {
+      model[[pos_terms]] - model[[neg_terms]]
+    } else if (pos_present) {
+      model[[pos_terms]]
+    } else {
+      -model[[neg_terms]]
+    }
+  })
+
+  output$query_result = renderTable({
+    query_type = input$query_type
+    if (query_type == 'word_query') {
+      query = input$word_query
+      wordVectors::closest_to(model, query)
+    } else if (query_type == 'word_analogy') {
+      query = word_analogy_result()
+      wordVectors::closest_to(model, query)
+    } else if (query_type == 'word_formula') {
+      query = word_formula_result()
+      wordVectors::closest_to(model, query)
+    } else if (query_type == 'word_query_builder') {
+      query = word_query_builder_result()
+      wordVectors::closest_to(model, query)
+    }
   })
 }
