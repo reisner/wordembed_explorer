@@ -39,23 +39,36 @@ server <- function(input, output) {
   })
 
   word_query_builder_result = reactive({
-    'test'
-  })
+    pos_terms = input$builder_pos_terms
+    neg_terms = input$builder_neg_terms
 
-  model_query = reactive({
-    query_type = input$query_type
-    if (query_type == 'word_query') {
-      return(input$word_query)
-    } else if (query_type == 'word_analogy') {
-      return(word_analogy_result())
-    } else if (query_type == 'word_formula') {
-      return(word_formula_result())
-    } else if (query_type == 'word_query_builder') {
-      return(word_query_builder_result())
+    req(!is.null(pos_terms) | !is.null(neg_terms))
+    pos_present = !is.null(pos_terms)
+    neg_present = !is.null(neg_terms)
+
+    if (pos_present & neg_present) {
+      model[[pos_terms]] - model[[neg_terms]]
+    } else if (pos_present) {
+      model[[pos_terms]]
+    } else {
+      -model[[neg_terms]]
     }
   })
 
-  output$query_result <- renderTable({
-    wordVectors::closest_to(model, model_query())
+  output$query_result = renderTable({
+    query_type = input$query_type
+    if (query_type == 'word_query') {
+      query = input$word_query
+      wordVectors::closest_to(model, query)
+    } else if (query_type == 'word_analogy') {
+      query = word_analogy_result()
+      wordVectors::closest_to(model, query)
+    } else if (query_type == 'word_formula') {
+      query = word_formula_result()
+      wordVectors::closest_to(model, query)
+    } else if (query_type == 'word_query_builder') {
+      query = word_query_builder_result()
+      wordVectors::closest_to(model, query)
+    }
   })
 }

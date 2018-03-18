@@ -1,15 +1,16 @@
 ui <- fixedPage(
   titlePanel("Word Embedding Explorer"),
+
   mainPanel(
     tabsetPanel(
       tabPanel(
-        "Word Query",
+        "Single Word Query",
         textInput("word_query", "Word:", "city"),
         value = 'word_query'
       ),
 
       tabPanel(
-        "Word Analogy",
+        "Query by Analogy",
         fixedRow(
           br(), br(),
           fixedRow(
@@ -41,7 +42,8 @@ ui <- fixedPage(
 
       tabPanel(
         "Query Builder",
-        '',
+        textInput('builder_pos_terms', "Positive Terms:", 'edmonton'),
+        textInput('builder_neg_terms', "Negative Terms:", 'waste'),
         value = 'word_query_builder'
       ),
 
@@ -53,7 +55,4 @@ ui <- fixedPage(
     h3("Query Result:"),
     fluidRow(tableOutput('query_result'), width = 12)
   )
-
-
-
 )
