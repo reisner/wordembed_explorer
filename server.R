@@ -21,7 +21,8 @@ processQuery <- function(query) {
 server <- function(input, output) {
   model = wordVectors::read.vectors("word_embeddings.bin")
   query_words = row.names(model)
-
+  exclude_words_ind = which(query_words %in% '</s>')
+  query_words = query_words[-exclude_words_ind]
 
   # ------ Word Formula
 
