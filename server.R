@@ -24,6 +24,13 @@ server <- function(input, output) {
   exclude_words_ind = which(query_words %in% '</s>')
   query_words = query_words[-exclude_words_ind]
 
+  # ------ Single Word Query
+  word_query_result = callModule(wordInput,
+                                 'word_query',
+                                 words = query_words,
+                                 label = 'Concept',
+                                 selected_words = 'city')
+
   # ------ Word Formula
 
   word_formula_result = reactive({
@@ -82,7 +89,8 @@ server <- function(input, output) {
   output$query_result = renderTable({
     query_type = input$query_type
     if (query_type == 'word_query') {
-      query = input$word_query
+      query = word_query_result()
+      req(query)
       wordVectors::closest_to(model, query)
     } else if (query_type == 'word_analogy') {
       query = word_analogy_result()

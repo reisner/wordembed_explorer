@@ -7,7 +7,7 @@ ui <- fixedPage(
     tabsetPanel(
       tabPanel(
         "Single Word Query",
-        textInput("word_query", "Word:", "city"),
+        wordInputUI('word_query'),
         value = 'word_query'
       ),
 
