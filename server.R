@@ -27,14 +27,12 @@ server <- function(input, output) {
     model_query(input$word_query)
   })
 
-  # output$formula_result <- renderTable({
-  #   query = input$formula
-  #   req(query)
-  #   query = processQuery(query)
-  #   formula = as.formula(query)
-  #   wordVectors::closest_to(model, eval(formula))
-  # })
-  #
+  observeEvent(input$word_formula, {
+    query = processQuery(input$word_formula)
+    formula = as.formula(query)
+    model_query(formula)
+  })
+
   # output$analogy_result <- renderTable({
   #   query_a = input$analogy_a
   #   query_b = input$analogy_b
@@ -49,8 +47,6 @@ server <- function(input, output) {
 
 
   output$query_result <- renderTable({
-    print("HERE:")
-    print(model_query)
     wordVectors::closest_to(model, model_query())
   })
 }

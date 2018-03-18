@@ -4,7 +4,9 @@ ui <- fixedPage(
     tabsetPanel(
       tabPanel("Word Query", textInput("word_query", "Word:", "city")),
       tabPanel("Word Analogy", ''),
-      tabPanel("Word Formula", ''),
+      tabPanel("Word Formula", tagList(
+        textInput("word_formula", "Word Formula:", "rec - affordable"),
+        strong("Usage:"), em("use +/- between words. Ensure spaces between terms."))),
       tabPanel("Query Builder", '')
     ),
 
@@ -15,19 +17,6 @@ ui <- fixedPage(
   )
 
 
-  #   column(
-  #     h2("Query using a Word Formula"),
-  #     textInput("formula", "Word Formula:", "edmonton + budget - waste"),
-  #     strong("Usage:"), em("use +/- between words. Ensure spaces between terms."),
-  #     br(),br(),
-  #     tableOutput("formula_result"),
-  #     width = 6)
-  # ),
-  #
-  # fixedRow(
-  #   br(), hr(), br()
-  # ),
-  #
   # fixedRow(
   #   fixedRow(
   #     column(h2("Word Analogy:"), width = 5)
