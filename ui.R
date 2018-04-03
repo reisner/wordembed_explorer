@@ -17,7 +17,7 @@ ui <- fixedPage(
           br(), br(),
           fixedRow(
             column(wordInputUI("analogy_a"), width = 2),
-            column("is to", width = 1),
+            column(br(), "is to", width = 1),
             column(wordInputUI("analogy_b"), width = 2)
           ),
           fixedRow(
@@ -26,7 +26,7 @@ ui <- fixedPage(
           ),
           fixedRow(
             column(wordInputUI("analogy_c"), width = 2),
-            column("is to?", width = 1)
+            column(br(), "is to?", width = 1)
           )
         ),
         value = 'word_analogy'
@@ -46,6 +46,12 @@ ui <- fixedPage(
         wordInputUI('builder_pos_terms'),
         wordInputUI('builder_neg_terms'),
         value = 'word_query_builder'
+      ),
+
+      tabPanel(
+        "Query by Text",
+        textInput("text_query", "Query Text:", "What can I do for fun?"),
+        value = 'query_by_text'
       ),
 
       id = "query_type"

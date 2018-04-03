@@ -96,23 +96,32 @@ server <- function(input, output) {
     }
   })
 
+  # ------ Query by text
+
+  text_query_result = reactive({
+    text = trimws(input$text_query)
+    req(text)
+    text = gsub("[[:punct:][:blank:]]+", " ", text)
+    strsplit(text, "\\s+")[[1]]
+  })
+
 
   # ------ Query Result
   output$query_result = renderTable({
     query_type = input$query_type
+    query = ''
     if (query_type == 'word_query') {
       query = word_query_result()
       req(query)
-      wordVectors::closest_to(model, query)
     } else if (query_type == 'word_analogy') {
       query = word_analogy_result()
-      wordVectors::closest_to(model, query)
     } else if (query_type == 'word_formula') {
       query = word_formula_result()
-      wordVectors::closest_to(model, query)
     } else if (query_type == 'word_query_builder') {
       query = word_query_builder_result()
-      wordVectors::closest_to(model, query)
+    } else if (query_type == 'query_by_text') {
+      query = text_query_result()
     }
+    wordVectors::closest_to(model, query)
   })
 }
