@@ -139,7 +139,9 @@ server <- function(input, output) {
     if (is(model_query, "VectorSpaceModel")) {
       result = wordVectors::closest_to(model, -model_query)
     } else if (is(model_query, "formula")) {
-      return()
+      # Negate the formula:
+      form = as.formula(paste0("~-(", as.character(model_query)[2], ")"))
+      result = wordVectors::closest_to(model, form)
     } else {
       result = wordVectors::closest_to(model, -model[[model_query]])
     }
