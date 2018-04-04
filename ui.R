@@ -60,6 +60,9 @@ ui <- fixedPage(
     br(), hr(), br(),
 
     h3("Query Result:"),
-    fluidRow(tableOutput('query_result'), width = 12)
+    fluidRow(
+      column(h4("Most Similar Terms:"), tableOutput('query_result'), width = 6),
+      column(h4("Least Similar Terms:"), tableOutput('furthest_result'), width = 6)
+    )
   )
 )

@@ -101,13 +101,13 @@ server <- function(input, output) {
   text_query_result = reactive({
     text = trimws(input$text_query)
     req(text)
-    text = gsub("[[:punct:][:blank:]]+", " ", text)
+    text = tolower(gsub("[[:punct:][:blank:]]+", " ", text))
     strsplit(text, "\\s+")[[1]]
   })
 
 
   # ------ Query Result
-  output$query_result = renderTable({
+  model_query = reactive({
     query_type = input$query_type
     query = ''
     if (query_type == 'word_query') {
@@ -122,6 +122,28 @@ server <- function(input, output) {
     } else if (query_type == 'query_by_text') {
       query = text_query_result()
     }
-    wordVectors::closest_to(model, query)
+    query
+  })
+
+  output$query_result = renderTable({
+    req(model_query)
+    result = wordVectors::closest_to(model, model_query())
+    names(result) = c("Term", "Similarity")
+    result
+  })
+
+  output$furthest_result = renderTable({
+    model_query = model_query()
+    req(model_query)
+    result = NULL
+    if (is(model_query, "VectorSpaceModel")) {
+      result = wordVectors::closest_to(model, -model_query)
+    } else if (is(model_query, "formula")) {
+      return()
+    } else {
+      result = wordVectors::closest_to(model, -model[[model_query]])
+    }
+    names(result) = c("Term", "Difference")
+    result
   })
 }
