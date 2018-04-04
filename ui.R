@@ -1,6 +1,8 @@
 source("WordInputModules.R")
+library(shinyjs)
 
 ui <- fixedPage(
+  useShinyjs(),
   titlePanel("Word Embedding Explorer"),
 
   mainPanel(
@@ -62,7 +64,16 @@ ui <- fixedPage(
     h3("Query Result:"),
     fluidRow(
       column(h4("Most Similar Terms:"), tableOutput('query_result'), width = 6),
-      column(h4("Least Similar Terms:"), tableOutput('furthest_result'), width = 6)
+      column(
+        hidden(
+          span(
+            id = "different_terms",
+            h4("Most Different Terms:"),
+            tableOutput('furthest_result')
+          )
+        ),
+        actionLink("show_different", "Show/Hide Most Different Terms"),
+        width = 6)
     )
   )
 )

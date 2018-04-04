@@ -146,4 +146,8 @@ server <- function(input, output) {
     names(result) = c("Term", "Difference")
     result
   })
+
+  observeEvent(input$show_different, {
+    toggle("different_terms")
+  })
 }
