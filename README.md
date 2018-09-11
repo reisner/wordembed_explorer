@@ -3,7 +3,7 @@
 A shiny app for exploring word embedding models.
 
 ## Setup
-Requires a word embeddings file, from word2Vec.
+Requires a word embeddings file, from word2Vec. Put it in the home directory, and call it `word_embeddings.bin`.
 
 Also requires:
 ```
