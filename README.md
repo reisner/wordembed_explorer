@@ -1,9 +1,11 @@
 # wordembed_explorer
 
-A shiny app for exploring word embedding models.
+A shiny app for exploring word embedding models
+
+![Alt text](screenshot.png?raw=true "Screenshot")
 
 ## Setup
-Requires a word embeddings file, from word2Vec. Put it in the home directory, and call it `word_embeddings.bin`.
+Requires a word embeddings file, from word2Vec. Put it in the home directory, and name it `word_embeddings.bin`
 
 Also requires:
 ```
